@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Productos vendidos</h1>
+<div class="card">
+  <form class="fila" method="get">
+    <label>Fecha<input type="date" name="fecha" value="{{ valor_input }}"></label>
+    <button>Consultar</button>
+  </form>
+</div>
+<div class="card" style="overflow-x:auto">
+  <h2>Ventas del {{ fecha }}</h2>
+  {% if ventas %}
+  <table>
+    <tr><th>Comprobante</th><th>Código</th><th>Producto</th><th>Cant.</th><th>P. unit.</th><th>Subtotal</th><th>Vendedor(a)</th></tr>
+    {% for v in ventas %}
+    <tr><td><a href="{{ url_for('comprobante', numero=v.numero_comprobante) }}">{{ v.numero_comprobante }}</a></td>
+        <td>{{ v.codigo_producto }}</td><td>{{ v.nombre_producto }}</td><td>{{ v.cantidad_vendida }}</td>
+        <td>S/ {{ '%.2f'|format(v.precio_unitario) }}</td><td>S/ {{ '%.2f'|format(v.total_venta) }}</td><td>{{ v.vendedor }}</td></tr>
+    {% endfor %}
+  </table>
+  <p>Comprobantes emitidos: {{ resumen.cantidad }} · Unidades vendidas: {{ unidades }}<br>
+     <b>TOTAL VENDIDO (con descuentos): S/ {{ '%.2f'|format(resumen.total) }}</b></p>
+  {% else %}<p>No se registraron ventas en esa fecha.</p>{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block titulo %}RODRIFARMA{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+  <span class="marca"> BOTICA RODRIFARMA</span>
+  {% if usuario %}
+    <a href="{{ url_for('inicio') }}">Inicio</a>
+    {% if permiso(1) %}<a href="{{ url_for('producto_nuevo') }}">Registrar producto</a>{% endif %}
+    <a href="{{ url_for('productos') }}">Productos</a>
+    <a href="{{ url_for('vender') }}">Vender</a>
+    {% if permiso(5) %}<a href="{{ url_for('ventas') }}">Ventas</a>{% endif %}
+    <a href="{{ url_for('vencimientos') }}">Vencimientos</a>
+    <span> {{ usuario.nombre }} ({{ usuario.rol }})</span>
+    <a href="{{ url_for('salir') }}">Salir</a>
+  {% endif %}
+</header>
+<main>
+  {% with mensajes = get_flashed_messages(with_categories=true) %}
+    {% for categoria, texto in mensajes %}<div class="msg {{ categoria }}">{{ texto }}</div>{% endfor %}
+  {% endwith %}
+  {% block contenido %}{% endblock %}
+</main>
+</body>
+</html>

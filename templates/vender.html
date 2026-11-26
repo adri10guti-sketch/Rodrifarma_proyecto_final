@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Registrar productos vendidos</h1>
+<div class="card">
+  <form method="post" class="fila">
+    <input type="hidden" name="accion" value="agregar">
+    <label>Código del producto<input name="codigo" placeholder="ING-0001" required></label>
+    <label>Cantidad<input name="cantidad" type="number" min="1" value="1" required></label>
+    <button>Agregar</button>
+  </form>
+</div>
+{% if carrito %}
+<div class="card" style="overflow-x:auto">
+  <table>
+    <tr><th>Producto</th><th>Código</th><th>Valor unit.</th><th>Cant.</th><th>Subtotal</th><th>Stock tras la venta</th><th></th></tr>
+    {% for i in carrito %}
+    <tr><td>{{ i.nombre }}</td><td>{{ i.codigo }}</td><td>S/ {{ '%.2f'|format(i.precio) }}</td><td>{{ i.cantidad }}</td>
+        <td>S/ {{ '%.2f'|format(i.cantidad * i.precio) }}</td><td>{{ i.stock_restante }}</td>
+        <td><form method="post"><input type="hidden" name="accion" value="quitar"><input type="hidden" name="indice" value="{{ loop.index0 }}"><button class="peligro">Quitar</button></form></td></tr>
+    {% endfor %}
+  </table>
+  <p class="der">Subtotal: S/ {{ '%.2f'|format(totales.subtotal) }}
+    {% if totales.descuento > 0 %} · Descuento: -S/ {{ '%.2f'|format(totales.descuento) }}{% endif %}
+    · <b>Total a pagar: S/ {{ '%.2f'|format(totales.total) }}</b></p>
+</div>
+<div class="card">
+  <h2>Datos del cliente</h2>
+  <form method="post" class="fila">
+    <input type="hidden" name="accion" value="confirmar">
+    <label>Nombre del cliente<input name="cliente" required></label>
+    <label>DNI (8) o RUC (11)<input name="documento" inputmode="numeric" required></label>
+    <button>Confirmar venta y emitir comprobante</button>
+  </form>
+  <form method="post" style="margin-top:.6rem"><input type="hidden" name="accion" value="vaciar"><button class="sec">Cancelar venta</button></form>
+</div>
+{% endif %}
+{% endblock %}

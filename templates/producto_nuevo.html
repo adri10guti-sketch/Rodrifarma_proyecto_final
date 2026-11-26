@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block contenido %}
+<div class="card">
+  <h1>Registrar producto recibido</h1>
+  <form method="post" class="fila">
+    <label>Nombre y concentración<input name="nombre" placeholder="Paracetamol 500mg" required></label>
+    <label>Presentación<select name="presentacion">{% for p in presentaciones %}<option>{{ p }}</option>{% endfor %}</select></label>
+    <label>Precio unitario (S/)<input name="precio" type="number" step="0.01" min="0.01" required></label>
+    <label>Cantidad recibida<input name="stock" type="number" min="1" required></label>
+    <label>Vencimiento (MM/AAAA)<input name="vencimiento" placeholder="08/2027" required></label>
+    <button>Guardar</button>
+  </form>
+</div>
+{% endblock %}

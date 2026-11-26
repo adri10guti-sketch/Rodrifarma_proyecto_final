@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block contenido %}
+<div class="card">
+  <h1>Actualizar precio</h1>
+  <p>{{ producto.nombre }} ({{ producto.codigo }}) · Precio actual: S/ {{ '%.2f'|format(producto.precio_unitario) }}</p>
+  <form method="post" class="fila">
+    <label>Nuevo precio (S/)<input name="precio" type="number" step="0.01" min="0.01" required></label>
+    <button>Actualizar</button><a class="btn sec" href="{{ url_for('productos') }}">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

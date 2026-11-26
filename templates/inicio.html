@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Bienvenid@, {{ usuario.nombre }}</h1>
+<div class="menu">
+  {% if permiso(1) %}<a href="{{ url_for('producto_nuevo') }}">1 · Registrar producto recibido</a>{% endif %}
+  <a href="{{ url_for('productos') }}">2 · Buscar por código / 3 · Listado</a>
+  <a href="{{ url_for('vender') }}">4 · Registrar productos vendidos</a>
+  {% if permiso(5) %}<a href="{{ url_for('ventas') }}">5 · Lista de productos vendidos</a>{% endif %}
+  <a href="{{ url_for('vencimientos') }}">6 · Vencidos y por vencer</a>
+  {% if permiso(7) %}<a href="{{ url_for('productos') }}">7 · Actualizar precio (desde el listado)</a>{% endif %}
+</div>
+{% endblock %}

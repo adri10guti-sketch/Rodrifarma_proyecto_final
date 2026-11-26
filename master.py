@@ -1,6 +1,6 @@
 from Modulos.conexiones_data_base import inicializar_bd
 from Modulos.seguridad import pantalla_acceso, tiene_permiso, mensaje_restringido
-from Modulos import gestion
+from Modulos import gestion, facturas_y_boletas
 
 TEXTO_OPCIONES = {
     1: "Registrar producto recibido",
@@ -13,12 +13,15 @@ TEXTO_OPCIONES = {
     0: "Salir (guardado automático)",
 }
 
+# Cada acción recibe al usuario que inició sesión
 ACCIONES = {
-    1: gestion.registrar_producto,
-    2: gestion.buscar_por_codigo,
-    3: gestion.mostrar_listado,
-    6: gestion.ver_vencimientos,
-    7: gestion.actualizar_precio,
+    1: lambda usuario: gestion.registrar_producto(),
+    2: lambda usuario: gestion.buscar_por_codigo(),
+    3: lambda usuario: gestion.mostrar_listado(),
+    4: lambda usuario: facturas_y_boletas.registrar_venta(usuario["nombre"]),
+    5: lambda usuario: facturas_y_boletas.lista_ventas(),
+    6: lambda usuario: gestion.ver_vencimientos(),
+    7: lambda usuario: gestion.actualizar_precio(),
 }
 
 
@@ -44,10 +47,8 @@ def menu_principal(usuario):
         elif opcion == 0:
             print("Datos guardados. ¡Hasta luego!")
             break
-        elif opcion in ACCIONES:
-            ACCIONES[opcion]()
         else:
-            print("Esta opción se agregará en el siguiente paso.")
+            ACCIONES[opcion](usuario)
 
 
 def main():

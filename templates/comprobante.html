@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block contenido %}
+<div class="card comprobante">
+  <h1>{{ farmacia }}</h1>
+  <p>RUC: {{ ruc }}<br><b>{{ tipo }}</b><br>N° {{ c.numero_comprobante }}</p>
+  <div class="datos">
+    <p>Cliente: {{ c.cliente_nombre }}<br>{{ etiqueta_doc }}: {{ c.cliente_documento }}<br>
+       Fecha y hora: {{ c.fecha_hora }}<br>Vendedor(a): {{ c.vendedor }}</p>
+  </div>
+  <table>
+    <tr><th>Código</th><th>Producto</th><th>Present.</th><th>F. venc.</th><th>Cant.</th><th>P. unit.</th><th>Subtotal</th></tr>
+    {% for d in detalle %}
+    <tr><td>{{ d.codigo_producto }}</td><td>{{ d.nombre_producto }}</td><td>{{ d.presentacion }}</td><td>{{ d.fecha_vencimiento }}</td>
+        <td>{{ d.cantidad_vendida }}</td><td>{{ '%.2f'|format(d.precio_unitario) }}</td><td>{{ '%.2f'|format(d.total_venta) }}</td></tr>
+    {% endfor %}
+  </table>
+  <p class="der">Subtotal general: S/ {{ '%.2f'|format(c.subtotal) }}<br>
+    {% if c.descuento > 0 %}Descuento ({{ pct }}%): -S/ {{ '%.2f'|format(c.descuento) }}<br>{% endif %}
+    <b>TOTAL A PAGAR: S/ {{ '%.2f'|format(c.total) }}</b><br>
+    Op. gravada (base imponible): S/ {{ '%.2f'|format(base) }}<br>
+    IGV {{ igv_pct }}% (incluido): S/ {{ '%.2f'|format(c.igv) }}</p>
+  <p>¡Gracias por su compra!</p>
+  <h3 class="noprint">Stock restante (control interno)</h3>
+  <table class="noprint"><tr><th>Código</th><th>Producto</th><th>Stock disponible</th></tr>
+    {% for d in detalle %}<tr><td>{{ d.codigo_producto }}</td><td>{{ d.nombre_producto }}</td><td>{{ d.stock }}</td></tr>{% endfor %}
+  </table>
+  <p class="noprint"><button onclick="window.print()"> Imprimir</button> <a class="btn sec" href="{{ url_for('vender') }}">Nueva venta</a></p>
+</div>
+{% endblock %}

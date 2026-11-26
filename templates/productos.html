@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Productos</h1>
+<div class="card">
+  <form class="fila" method="get">
+    <label>Buscar por código<input name="q" value="{{ q }}" placeholder="ING-0001"></label>
+    <button>Buscar</button>
+    {% if q %}<a class="btn sec" href="{{ url_for('productos') }}">Ver todos</a>{% endif %}
+  </form>
+</div>
+<div class="card" style="overflow-x:auto">
+<table>
+  <tr><th>Nombre</th><th>Present.</th><th>F. registro</th><th>F. vence</th><th>Código</th><th>P. unit.</th><th>Stock</th>{% if permiso(7) %}<th></th>{% endif %}</tr>
+  {% for p in productos %}
+  <tr>
+    <td>{{ p.nombre }}</td><td>{{ p.presentacion }}</td><td>{{ p.fecha_registro }}</td><td>{{ p.fecha_vencimiento }}</td>
+    <td>{{ p.codigo }}</td><td>S/ {{ '%.2f'|format(p.precio_unitario) }}</td>
+    <td>{{ p.stock }}{% if p.stock <= stock_bajo %} {% endif %}</td>
+    {% if permiso(7) %}<td><a class="btn sec" href="{{ url_for('actualizar_precio', codigo=p.codigo) }}">Cambiar precio</a></td>{% endif %}
+  </tr>
+  {% else %}<tr><td colspan="8">No hay productos para mostrar.</td></tr>{% endfor %}
+</table>
+<p>Total de registros: {{ productos|length }}</p>
+</div>
+{% endblock %}

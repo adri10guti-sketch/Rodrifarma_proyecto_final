@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Productos vencidos y por vencer</h1>
+<div class="card" style="overflow-x:auto">
+  {% if alertas %}
+  <table>
+    <tr><th>Nombre</th><th>Present.</th><th>Código</th><th>F. vence</th><th>Stock</th><th>Estado</th></tr>
+    {% for meses, p, estado in alertas %}
+    <tr><td>{{ p.nombre }}</td><td>{{ p.presentacion }}</td><td>{{ p.codigo }}</td><td>{{ p.fecha_vencimiento }}</td>
+        <td>{{ p.stock }}</td><td><span class="tag {{ estado.split()[0] }}">{{ estado }}</span></td></tr>
+    {% endfor %}
+  </table>
+  {% else %}<p>No hay productos vencidos ni por vencer (≤ {{ meses }} meses).</p>{% endif %}
+</div>
+{% if bajos %}
+<div class="card" style="overflow-x:auto">
+  <h2> Alerta de stock bajo ({{ stock_bajo }} unidades o menos)</h2>
+  <table><tr><th>Nombre</th><th>Código</th><th>Stock</th></tr>
+    {% for p in bajos %}<tr><td>{{ p.nombre }}</td><td>{{ p.codigo }}</td><td>{{ p.stock }}</td></tr>{% endfor %}
+  </table>
+</div>
+{% endif %}
+{% endblock %}
